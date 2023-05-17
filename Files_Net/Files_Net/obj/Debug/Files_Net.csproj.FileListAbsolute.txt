@@ -1,0 +1,12 @@
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\bin\Debug\Files_Net.exe.config
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\bin\Debug\Files_Net.exe
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\bin\Debug\Files_Net.pdb
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.csproj.SuggestedBindingRedirects.cache
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.Form1.resources
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.Properties.Resources.resources
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.csproj.GenerateResource.cache
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.exe
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.pdb
+C:\Users\HP\Desktop\home\Programming\C#\Files_Net\Files_Net\obj\Debug\Files_Net.TextFileContentForm.resources
