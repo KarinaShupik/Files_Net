@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Compression;
 
 namespace Files_Net
 {
@@ -267,6 +269,325 @@ namespace Files_Net
             TextFileContentForm contentForm = new TextFileContentForm();
             contentForm.FileContent = content;
             contentForm.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи шлях є дійсним каталогом
+            if (Directory.Exists(selectedPath))
+            {
+                string newDirectoryName = "NewDirectory";
+                string newDirectoryPath = Path.Combine(selectedPath, newDirectoryName);
+
+                try
+                {
+                    // Створення нового каталогу
+                    Directory.CreateDirectory(newDirectoryPath);
+                    MessageBox.Show($"Directory '{newDirectoryName}' created successfully.", "Create Directory");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to create directory: {ex.Message}", "Create Directory Error");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid directory.", "Invalid Path");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string sourceFolderName = @"C:\Users\HP\Desktop\home\Verstka";
+            string destFolderName = @"C:\Users\HP\Desktop\home\NewDirectory";
+
+            var allFiles = Directory.GetFiles(sourceFolderName, sourceFolderName);
+            foreach (var file in allFiles)
+            {
+                var destFileName = destFolderName + Path.GetFileNameWithoutExtension(file) + Path.GetExtension(file);
+                File.Move(file, destFileName);
+            }
+
+            // Вивести MessageBox з повідомленням після переміщення файлів
+            MessageBox.Show("Файли були успішно переміщені.");
+
+            // Додаткові дії після переміщення файлів
+        }
+
+        static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+        {
+            // Get information about the source directory
+            var dir = new DirectoryInfo(sourceDir);
+
+            // Check if the source directory exists
+            if (!dir.Exists)
+                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+            // Cache directories before we start copying
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // Create the destination directory if it doesn't exist
+            if (!Directory.Exists(destinationDir))
+                Directory.CreateDirectory(destinationDir);
+
+            // Get the files in the source directory and copy to the destination directory
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath, true);
+            }
+
+            // If recursive and copying subdirectories, recursively call this method
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dirs)
+                {
+                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+            string newDirectoryPath = @"C:\Users\HP\Desktop\home\NewDirectory";
+
+            // Копіювання каталогу
+            CopyDirectory(selectedPath, newDirectoryPath, true);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи шлях є дійсним каталогом
+            if (Directory.Exists(selectedPath))
+            {
+                try
+                {
+                    // Видалення каталогу
+                    Directory.Delete(selectedPath, true);
+                    MessageBox.Show("Directory deleted successfully.", "Delete Directory");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to delete directory: {ex.Message}", "Delete Directory Error");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid directory.", "Invalid Path");
+            }
+        }
+
+        private void btnCreateFile_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+            string newFilePath = Path.Combine(selectedPath, "NewFile.txt");
+
+            try
+            {
+                // Створення порожнього файлу
+                File.Create(newFilePath).Close();
+                MessageBox.Show($"File '{newFilePath}' created successfully.", "Create File");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to create file: {ex.Message}", "Create File Error");
+            }
+        }
+
+        private void btnMoveFile_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+            string sourceFilePath = Path.Combine(selectedPath, "NewFile.txt");
+            string destFilePath = Path.Combine(selectedPath, "Приклад.txt");
+
+            try
+            {
+                // Перенесення файлу
+                File.Move(sourceFilePath, destFilePath);
+                MessageBox.Show($"File moved to '{destFilePath}' successfully.", "Move File");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to move file: {ex.Message}", "Move File Error");
+            }
+        }
+
+        private void btnCopyFile_Click_1(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+            string sourceFilePath = Path.Combine(selectedPath, "SourceFile.txt");
+            string destFilePath = Path.Combine(selectedPath, "CopyFile.txt");
+
+            try
+            {
+                // Копіювання файлу
+                File.Copy(sourceFilePath, destFilePath);
+                MessageBox.Show($"File copied to '{destFilePath}' successfully.", "Copy File");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to copy file: {ex.Message}", "Copy File Error");
+            }
+        }
+
+        private void btnDeleteFile_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+            string filePath = Path.Combine(selectedPath, "FileToDelete.txt");
+
+            try
+            {
+                // Видалення файлу
+                File.Delete(filePath);
+                MessageBox.Show($"File '{filePath}' deleted successfully.", "Delete File");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to delete file: {ex.Message}", "Delete File Error");
+            }
+        }
+
+        private void btnEditAttributes_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи шлях є дійсним файлом або каталогом
+            if (File.Exists(selectedPath) || Directory.Exists(selectedPath))
+            {
+                // Отримання поточних атрибутів
+                FileAttributes attributes;
+                if (File.Exists(selectedPath))
+                {
+                    attributes = File.GetAttributes(selectedPath);
+                }
+                else
+                {
+                    attributes = File.GetAttributes(selectedPath);
+                }
+
+                // Показати атрибути у MessageBox
+                string message = $"Attributes of {selectedPath}:\n";
+                message += $"Read-Only: {(attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly}\n";
+                message += $"Hidden: {(attributes & FileAttributes.Hidden) == FileAttributes.Hidden}\n";
+                message += $"Archive: {(attributes & FileAttributes.Archive) == FileAttributes.Archive}\n";
+                // Додайте інші атрибути за потреби
+
+                MessageBox.Show(message, "File Attributes");
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid file or directory.", "Invalid Path");
+            }
+        }
+
+        private void EditDirAttributes_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи шлях є дійсним каталогом
+            if (Directory.Exists(selectedPath))
+            {
+                // Отримання поточних атрибутів
+                var directoryInfo = new DirectoryInfo(selectedPath);
+                var currentAttributes = directoryInfo.Attributes;
+
+                // Підготовка повідомлення про атрибути
+                string message = $"Attributes of {selectedPath}:\n";
+                message += $"Read-Only: {(currentAttributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly}\n";
+                message += $"Hidden: {(currentAttributes & FileAttributes.Hidden) == FileAttributes.Hidden}\n";
+                message += $"Archive: {(currentAttributes & FileAttributes.Archive) == FileAttributes.Archive}\n";
+                // Додайте інші атрибути за потреби
+
+                MessageBox.Show(message, "Directory Attributes");
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid directory.", "Invalid Path");
+            }
+        }
+
+        private void EditTextFile_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи вибраний елемент є файлом
+            if (File.Exists(selectedPath))
+            {
+                if (TextFile(selectedPath))
+                {
+                    // Відкриття текстового файлу у редакторі
+                    Process.Start("notepad.exe", selectedPath);
+                }
+                else
+                {
+                    MessageBox.Show("Selected file is not a text file.", "Invalid File");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid file.", "Invalid Path");
+            }
+        }
+
+        private bool TextFile(string filePath)
+        {
+            string extension = Path.GetExtension(filePath);
+            string[] textExtensions = { ".txt", ".log", ".csv" }; // Додайте інші розширення за потреби
+
+            return textExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private void btnCompress_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи вибраний елемент є файлом або каталогом
+            if (File.Exists(selectedPath))
+            {
+                // Архівація окремого файлу
+                string zipPath = Path.ChangeExtension(selectedPath, "zip");
+                ZipFile.CreateFromDirectory(Path.GetDirectoryName(selectedPath), zipPath);
+
+                MessageBox.Show($"File compressed successfully. Archive path: {zipPath}", "Compression");
+            }
+            else if (Directory.Exists(selectedPath))
+            {
+                // Архівація каталогу
+                string zipPath = selectedPath + ".zip";
+                ZipFile.CreateFromDirectory(selectedPath, zipPath);
+
+                MessageBox.Show($"Directory compressed successfully. Archive path: {zipPath}", "Compression");
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid file or directory.", "Invalid Path");
+            }
+        }
+
+        private void btnExtract_Click(object sender, EventArgs e)
+        {
+            string selectedPath = txtInput.Text;
+
+            // Перевірка, чи вибраний елемент є файлом ZIP архіву
+            if (File.Exists(selectedPath) && Path.GetExtension(selectedPath).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                string extractPath = Path.Combine(Path.GetDirectoryName(selectedPath), Path.GetFileNameWithoutExtension(selectedPath));
+
+                // Розпакування файлів
+                ZipFile.ExtractToDirectory(selectedPath, extractPath);
+
+                MessageBox.Show($"Files extracted successfully. Destination path: {extractPath}", "Extraction");
+            }
+            else
+            {
+                MessageBox.Show("Selected path is not a valid ZIP archive.", "Invalid Path");
+            }
         }
     }
 }
